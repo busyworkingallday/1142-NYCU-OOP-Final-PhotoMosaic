@@ -5,8 +5,10 @@
 #include "data_loader.h"   // provides Data_Loader and `using namespace std;`
 
 class BitFieldFilter;   // 前向宣告
+class PhotoMosaic;      // 前向宣告(Step 4)
 
 class Image{
+    friend class PhotoMosaic;   // Step 4: uses the shared data_loader to list the tile folder
 protected:
     int width;
     int height;

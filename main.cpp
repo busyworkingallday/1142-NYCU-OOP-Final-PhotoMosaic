@@ -70,7 +70,16 @@ int main(int argc, char *argv[]){
     img7->ApplyFilters(combo_filter);
     img7->Display_CMD();
 
-    // some photo mosaic driven code here
+    // ---- Step 4: PhotoMosaic demo ----
+    // Build a mosaic of lena out of the cifar10 tiles; the returned RGBImage* is
+    // owned by us, so dump/display then delete it.
+    PhotoMosaic m(16);
+    RGBImage *r = m.generate("Image-Folder/cifar10", "Image-Folder/lena.jpg");
+    if (r) {
+        r->DumpImage("mosaic.jpg");
+        r->Display_CMD();
+        delete r;
+    }
 
     // more ...
 

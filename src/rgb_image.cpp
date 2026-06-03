@@ -56,6 +56,28 @@ void RGBImage::replace_buffer(int ***new_pixels) {
     pixels = new_pixels;
 }
 
+// Step 4: nearest-neighbour rescale to newW x newH. Allocates a fresh buffer,
+// samples from the ORIGINAL pixels, then swaps it in via replace_buffer (which
+// frees the old buffer using the still-current old dims) and updates dims.
+void RGBImage::resize(int newW, int newH) {
+    if (pixels == nullptr || newW <= 0 || newH <= 0) return;
+
+    int ***out = new int**[newH];
+    for (int ny = 0; ny < newH; ++ny) {
+        out[ny] = new int*[newW];
+        for (int nx = 0; nx < newW; ++nx) {
+            out[ny][nx] = new int[3];
+            int sy = ny * height / newH;   // both < old height/width (ny<newH, nx<newW)
+            int sx = nx * width / newW;
+            for (int c = 0; c < 3; ++c)
+                out[ny][nx][c] = pixels[sy][sx][c];
+        }
+    }
+    replace_buffer(out);   // frees old buffer (old dims), adopts out
+    width = newW;
+    height = newH;
+}
+
 bool RGBImage::LoadImage(string filename) {
     release();   // drop any previously held buffer first (reload-safe, leak-free)
 

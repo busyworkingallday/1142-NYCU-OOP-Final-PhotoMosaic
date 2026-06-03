@@ -5,6 +5,7 @@
 
 class RGBImage : public Image{
     friend class BitFieldFilter;   // Step 3: reads/replaces pixels to apply filters
+    friend class PhotoMosaic;      // Step 4: reads pixels to build the mosaic
 
 private:
     int ***pixels;
@@ -29,6 +30,8 @@ public:
     void Display_CMD() override;
 
     void ApplyFilters(const BitFieldFilter &filter) override;   // Step 3 (double dispatch)
+
+    void resize(int newW, int newH);   // Step 4: nearest-neighbour rescale (changes dims)
 };
 
 #endif
