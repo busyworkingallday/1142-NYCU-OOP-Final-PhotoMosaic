@@ -1,12 +1,5 @@
 # OOP Final Project: Photo Mosaic
-Last Updated: 6/3
->[!CAUTION]
-> **Update Q&A section(新增QA部分在最後面!)**
-> 新增影片說明如何問一個有用的問題...  
-> 新增cppcheck的安裝  
-> 新增cppcheck的使用  
-> 新增feedback
-
+Last Updated: 2026.06.04
 
 ![image](https://hackmd.io/_uploads/By0sjAYbR.png)  
 如你所見，給定一張目標圖片，我們希望可以用很多張小圖拼湊出大圖的原貌。
@@ -407,39 +400,41 @@ $ make check
 ```bash
 $ tree -L 2
 ```
-
-                    ├── Data-Loader(處理image I/O)
-                    │   ├── data_loader.cpp
-                    │   └── data_loader.h
-                    ├── data_loader_demo.cpp(示範如何使用data_loader Step1)
-                    ├── Image-Folder(放圖片的地方)
-                    │   ├── 4k_owl.jpg
-                    │   ├── cifar10
-                    │   ├── girl_2x.png
-                    │   ├── lena.jpg
-                    │   └── mnist
-                    ├── inc (put your header here)
-                    │   ├── bit_field_filter.h(Step3)
-                    │   ├── gray_image.h(Step2)
-                    │   ├── image.h(Step2)
-                    │   ├── photo_mosaic.h(Step4)
-                    │   └── rgb_image.h(Step2)
-                    ├── LICENSE
-                    ├── main.cpp(Driven code)
-                    ├── Makefile
-                    ├── README.md
-                    ├── scripts
-                    │   └── clone_env.sh
-                    ├── src (put your implementation here)
-                    │   ├── bit_field_filter.cpp(Step3)
-                    │   ├── gray_image.cpp(Step2)
-                    │   ├── image.cpp(Step2)
-                    │   ├── photo_mosaic.cpp(Step4)
-                    │   └── rgb_image.cpp(Step2)
-                    └── third-party(第三方開源圖片套件)
-                        ├── catimg
-                        ├── CImg
-                        └── libjpeg
+```
+.
+├── Data-Loader (處理image I/O)
+│   ├── data_loader.cpp
+│   └── data_loader.h
+├── Image-Folder (放圖片的地方)
+│   ├── 4k_owl.jpg
+│   ├── cifar10
+│   ├── girl_2x.png
+│   ├── lena.jpg
+│   └── mnist
+├── LICENSE
+├── Makefile
+├── README.md
+├── data_loader_demo.cpp (示範如何使用data_loader Step1)
+├── inc (put your header here)
+│   ├── bit_field_filter.h (Step3)
+│   ├── gray_image.h (Step2)
+│   ├── image.h (Step2)
+│   ├── photo_mosaic.h (Step4)
+│   └── rgb_image.h (Step2)
+├── main.cpp (Driven Code)
+├── scripts
+│   └── clone_env.sh
+├── src (put your implementation here)
+│   ├── bit_field_filter.cpp (Step3)
+│   ├── gray_image.cpp (Step2)
+│   ├── image.cpp (Step2)
+│   ├── photo_mosaic.cpp (Step4)
+│   └── rgb_image.cpp (Step2)
+└── third-party (第三方開源圖片套件)
+    ├── CImg
+    ├── catimg
+    └── libjpeg
+```
 
 將class header interface放在inc folder內部，並且將source code的實作放在src folder內部，makefile會自動去識別dependency，並且在您對某些檔案進行修改後，僅編譯需要重新編譯之檔案，不會整份project重新編譯一次，如此一來再搭配上parallel compile，讓您再開發上能夠節省不少時間。
 
