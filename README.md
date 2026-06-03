@@ -1,13 +1,11 @@
 # OOP Final Project: Photo Mosaic
-Last Updated: 6/17
-:::danger
-Update Q&A section(新增QA部分在最後面!)  
-寄信詢問前可以先看一下問題有沒有被問過!  
-新增影片說明如何問一個有用的問題...  
-新增cppcheck的安裝
-新增cppcheck的使用
-新增feedback
-:::
+Last Updated: 5/5
+>[!CAUTION]
+> **Update Q&A section(新增QA部分在最後面!)**
+> 新增影片說明如何問一個有用的問題...  
+> 新增cppcheck的安裝  
+> 新增cppcheck的使用  
+> 新增feedback
 
 
 ![image](https://hackmd.io/_uploads/By0sjAYbR.png)
@@ -94,21 +92,9 @@ private:
         ```
         給定輸出的w,h,要輸出的二維(三維)陣列與要輸出的圖片檔名，會將圖片輸出成*jpg/*png。
 
-data_loader提供了三種介面來展示圖片: 
-*    1. X_Server
-        使用moba_xterm中的Xserver來跳出視窗來顯示圖片。
-        ```c=
-        void Display_Gray_X_Server(int w, int h, int **pixels);
-        void Display_RGB_X_Server(int w, int h, int ***pixels);
-        ```
-        
-        ![image](https://hackmd.io/_uploads/BJZsWdjZC.png)
+data_loader提供了兩種介面來展示圖片: 
  
-        :::danger
-        因為valgrind在mem check時，無法辨認此function的部分macro expansion，因此在做memory leak check時，請不要使用此function。
-        :::
- 
-*    2. ASCII ART
+*    1. ASCII ART
         使用" .-+#@"來表示圖片中的明暗程度，將圖片以符號的形式印在terminal。
         
         ```c=
@@ -117,7 +103,7 @@ data_loader提供了三種介面來展示圖片:
         ```
         ![image](https://hackmd.io/_uploads/HJvPGdiWC.png)
 
-*    3. catimg 
+*    2. catimg 
         將圖片本身直接印在terminal，支援灰階及彩色圖片。
 
         ```c=
@@ -449,7 +435,7 @@ $ tree -L 2
 :::
 
 ## Submission
-*    Time: 2024/6/17(一) 12:00
+*    Time: 2026/6/18(四) 12:00
 *    File to submit: `NYCU-OOP-Final-Project.tar` & `final_report.pdf`
         ```bash=
         # 產生壓縮檔
@@ -461,27 +447,19 @@ $ tree -L 2
         $ tar xvf NYCU-OOP-Final-Project.tar
         ```
 :::info
-請確認解壓縮後，可以在linux server上成功編譯並且執行。
+請確認解壓縮後，可以在linux上成功編譯並且執行。
 :::
 
 ## Demo
-*    Time: 2024/6/17(一) 14:00 ~16:00
+*    Time: 2024/6/18(四) 14:00 ~16:00
 *    Place: Online
 
 :::info
 在Linux中運行程式，詳細的呈現每一項功能，沒有demo的組別期末專題0分
 :::
 
-## TA groups
-*    何祁恩: mnb51817@gmail.com
-*    林煜睿: yrlin719.ee12@nycu.edu.tw
-*    張理為: reeveschang.ee12@nycu.edu.tw
-*    李品賢: bb1456983.ee12@nycu.edu.tw
-*    劉映廷: dacy8864@gmail.com
-*    欉家新: tsungnewly@gmail.com
-
-:::warning
-寄信問助教問題請一律寄給所有助教，包括過程中所有的回覆應答，請使用"回覆所有人"。
+:::danger
+抄襲0分
 :::
 
 ## Thanks for the following open source projects
@@ -496,30 +474,13 @@ $ tree -L 2
 
 在這次期末專題寫信來問問題時，蠻多人都不知道如何問一個好的問題。剛好今天yt演算法推薦上面這部影片給我就拿來跟你們分享。
 
-希望你們在問問題時，可以讓我們知道你不會的點在哪邊，並且提供相關的證據(截圖或是什麼樣的error message)，我相信助教們的經驗絕對比各位還要豐富，我們可能稍微提點個五分鐘可以省去你瞎忙兩個小時。因此，學會如何問問題是很重要的事情!  
+希望你們在問問題時，可以讓我們知道你的具體情況、想要做什麼，並且提供相關的證據(截圖或是error message)。  
 
 ---
 
+這些是先前學員們提出過的問題，提供給各位參考:
+
 *    Q1:
-關於期末專題的memory leak check，有提到跟X_Server有關的function會影響檢查的結果，檢查時不要用這個function，想請問具體是要在哪些地方disable掉這個function呢?
-
-        :::spoiler
-        與X_server相關的function因為valgrind尚未將這個display的function列入考慮，因此會有false alarm的問題在，在錯誤訊息中也可以看到valgrind有自己承認他不能識別該function。至於要如何disable，你可以就單純把需要使用到X_server的時候註解掉即可。此時valgrind便不會執行到該function，便不會有相關問題。
-        
-        好一點的註解方法: (善用flag)
-        ```bash=
-        #define ENABLE_X_SERVER false
-
-        if(ENABLE_X_SERVER){
-            //X_Server command here
-        }
-        ```
-        
-        ![image](https://hackmd.io/_uploads/BJcaPN3mR.png)
-        上圖為valgrind沒有disable X_server相關command的警示訊息，給同學參考。
-        :::
-
-*    Q2:
 有些圖片為何經過data_loader讀取後會發生錯誤?
 
         :::spoiler
@@ -540,7 +501,7 @@ $ tree -L 2
         :::
     
 
-*    Q3:
+*    Q2:
 GrayImage 和 RGBImage class 中的CMD要呼叫datal_oader裡的Diaplay_Gray_CMD、Display_RGB_CMD function，但我們不知道filename要去哪裡抓，請助教們解惑。
 
         :::spoiler
@@ -551,41 +512,21 @@ GrayImage 和 RGBImage class 中的CMD要呼叫datal_oader裡的Diaplay_Gray_CMD
         這邊我有提示需要搭配dump 來使用，可以先產生一個暫時的輸出圖片，使用CMD相關function之後（內部實作其實是去call catimg 的binary 執行檔），再使用system call的方法將該暫時出現的圖片刪除。查詢C/C++ system()的使用方式，配搭之前之前上機課教過的linux command 即可在c++中刪除該中間產生的圖片檔！
         :::
         
-*    Q4:
-我想詢問專題是一定要在mobaxterm上面跑嗎，還是可以直接在windows powershell 裡面跑就好。
-
-        :::spoiler
-
-        對! 這次期末專題為求簡單，請在mobaxterm上跑。
-        我猜如果你要把它移植到windows跑得動會需要費一大功夫。
-        因為server本身有安裝一些套件，像是git, shell, cmake, make. 
-        還有一些相關的library來使用，像是pthread, jpeg, Xserver。
-        這些東西如果你要移植到windows跑是沒有問題，只是你會花費非常大的時間在裝環境，甚至最終還會失敗。
-        :::
-
-*    Q5: 
-將圖片以符號的形式印在terminal，如果是小圖的話能夠印正常，大圖沒辦法印出全部。  
-
-        :::spoiler
-        ![螢幕擷取畫面 (203)](https://hackmd.io/_uploads/Sy_8K-DHR.png)
-        在mobaxterm terminal ctrl +滑鼠滾輪往下 縮小terminal 行距與字的大小可以解決你的問題！
-        :::
-        
-*    Q6: 
+*    Q3: 
 可以在Image.h gray_image.h rgb_image.h中加額外的member function或data member嗎?
 
         :::spoiler
         可以喔! 記得註明在報告中!
         :::
 
-*    Q7: 
+*    Q4: 
 原本 Step 3: Bit-field with image filter design(15%) 是使用bit_field的方式，來指定要通過1-4種簡單影像處理的演算法，那如果我多做幾個bit_field，做到7-8個這樣，這樣能算進額外功能的部分嗎?
 
         :::spoiler
         可以，我們會將功能複雜程度分成 A B C D不同等級，依次分別加 7 5 3 1的分數！記得在報告描述你做了什麼功能及實作細節！
         :::
 
-*    Q8:
+*    Q5:
 助教您好，關於make後執行編譯檔時顯示 Failed to recognize format of file 'Image-Folder/1.jpeg’.，也試過jpg檔和png檔，都出現同樣的問題，有用過file Image-Folder/1.jpeg測試檢查文件格式，出現JPEG image data ，所以應該是沒問題的。因此想詢問為何出現此錯誤呢？
 
         :::spoiler
@@ -593,7 +534,7 @@ GrayImage 和 RGBImage class 中的CMD要呼叫datal_oader裡的Diaplay_Gray_CMD
         這邊確實蠻複雜的，當初我在串Cimg library 的時候也卡了很久，跌了很多的坑，因此我提供了data_loader的class 讓你們免於這些困擾，你可以很簡易的使用data_loader 所提供的介面來把圖片讀成陣列！不需要自己去撰寫讀檔的部分！
         :::
         
-*    Q9:
+*    Q6:
 想請問QA中提到的cppcheck要如何安裝呢?雖然網路上有很多參考資料但我還是搞不定。
 
         :::spoiler
@@ -634,7 +575,7 @@ GrayImage 和 RGBImage class 中的CMD要呼叫datal_oader裡的Diaplay_Gray_CMD
         可以看到這支程式中很明顯犯的錯誤，此為靜態分析。在沒有執行你的code的情況下，將我們的code當成cppcheck這支程式的input，來做code的錯誤偵測。
         :::
         
-*    Q10:
+*    Q7:
 這邊還想請問一下cppcheck應該要安裝在我的資料夾中的哪一層呢?因為我剛才用發現貌似被測試的檔案必須要在cppcheck-2.13.0的資料夾中才有辦法成功被檢測。是否我還需要將要檢測的程式碼複製一分到cppcheck-2.13.0當中?
 
         :::spoiler
@@ -643,7 +584,7 @@ GrayImage 和 RGBImage class 中的CMD要呼叫datal_oader裡的Diaplay_Gray_CMD
         你不一定要安裝在我們專題資料夾中，你可以把./cpocheck [這邊放專題路徑] —some argu 
         :::
 
-*    Q11:
+*    Q8:
 在檢查main.cpp時，他會報說:
 ![image](https://hackmd.io/_uploads/BkACNa9rC.png)  
 請問要這樣直接放進報告中嗎?還是要將其他所有的cpp檔都用cppcheck跑過一次?
@@ -691,16 +632,5 @@ GrayImage 和 RGBImage class 中的CMD要呼叫datal_oader裡的Diaplay_Gray_CMD
         *    [Jacob Sorber](https://www.youtube.com/@JacobSorber)
                 
                 一個很好入門資料結構的youtuber課程
-        
 
-*    Contact Info
-
-        很高興認識各位，以下是我的聯絡方式及github，若是未來有甚麼有趣的想法，都可以跟我討論。
         
-        [gmail]-(mnb51817@gmail.com)
-        
-        [github]-(https://github.com/coherent17)
-        
-## 最終成果(github link)
-
-*    Remove for next sememster
