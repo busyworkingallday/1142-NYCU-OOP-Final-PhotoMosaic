@@ -3,6 +3,7 @@
 #include "rgb_image.h"
 #include "photo_mosaic.h"
 #include "bit_field_filter.h"
+#include "image_factory.h"
 
 int main(int argc, char *argv[]){
     Image *img1 = new GrayImage();
@@ -70,6 +71,62 @@ int main(int argc, char *argv[]){
     img7->ApplyFilters(combo_filter);
     img7->Display_CMD();
 
+    // ---- Step 5: extra filter demo (BRIGHTNESS) ----
+    Image *img8 = new RGBImage();
+    img8->LoadImage("Image-Folder/lena.jpg");
+    BitFieldFilter bright_filter;
+    bright_filter.enable(BitFieldFilter::BRIGHTNESS);
+    img8->ApplyFilters(bright_filter);
+    img8->Display_CMD();
+
+    // ---- Step 5: extra filter demo (SHARPEN) ----
+    Image *img9 = new RGBImage();
+    img9->LoadImage("Image-Folder/lena.jpg");
+    BitFieldFilter sharpen_filter;
+    sharpen_filter.enable(BitFieldFilter::SHARPEN);
+    img9->ApplyFilters(sharpen_filter);
+    img9->Display_CMD();
+
+    // ---- Step 5: extra filter demo (MEDIAN) ----
+    Image *img10 = new RGBImage();
+    img10->LoadImage("Image-Folder/lena.jpg");
+    BitFieldFilter median_filter;
+    median_filter.enable(BitFieldFilter::MEDIAN);
+    img10->ApplyFilters(median_filter);
+    img10->Display_CMD();
+
+    // ---- Step 5: extra filter demo (INVERT) ----
+    Image *img11 = new RGBImage();
+    img11->LoadImage("Image-Folder/lena.jpg");
+    BitFieldFilter invert_filter;
+    invert_filter.enable(BitFieldFilter::INVERT);
+    img11->ApplyFilters(invert_filter);
+    img11->Display_CMD();
+
+    // ---- Step 5: extra filter demo (GRAYSCALE) ----
+    Image *img12 = new RGBImage();
+    img12->LoadImage("Image-Folder/lena.jpg");
+    BitFieldFilter gray_filter;
+    gray_filter.enable(BitFieldFilter::GRAYSCALE);
+    img12->ApplyFilters(gray_filter);
+    img12->Display_CMD();
+
+    // ---- Step 5: extra filter demo (THRESHOLD) ----
+    Image *img13 = new RGBImage();
+    img13->LoadImage("Image-Folder/lena.jpg");
+    BitFieldFilter thresh_filter;
+    thresh_filter.enable(BitFieldFilter::THRESHOLD);
+    img13->ApplyFilters(thresh_filter);
+    img13->Display_CMD();
+
+    // ---- Step 5: Factory Pattern demo ----
+    // ImageFactory::create inspects the file's channels and returns the right
+    // concrete type as an Image* (RGB for lena, gray for an mnist digit).
+    Image *fac_rgb = ImageFactory::create("Image-Folder/lena.jpg");
+    if (fac_rgb) { fac_rgb->Display_CMD(); delete fac_rgb; }
+    Image *fac_gray = ImageFactory::create("Image-Folder/mnist/img_100.jpg");
+    if (fac_gray) { fac_gray->Display_CMD(); delete fac_gray; }
+
     // ---- Step 4: PhotoMosaic demo ----
     // Build a mosaic of lena out of the cifar10 tiles; the returned RGBImage* is
     // owned by us, so dump/display then delete it.
@@ -81,6 +138,18 @@ int main(int argc, char *argv[]){
         delete r;
     }
 
+    // ---- Step 5: single-image PhotoMosaic ----
+    // Tile source is the set of distinct blocks of ONE image (lena); they rebuild
+    // the target (lena) — the IEEE single-image mosaic idea. Returned RGBImage* is
+    // owned by us: dump/display then delete.
+    PhotoMosaic single_mosaic(16);
+    RGBImage *sr = single_mosaic.generate_single("Image-Folder/lena.jpg", "Image-Folder/lena.jpg");
+    if (sr) {
+        sr->DumpImage("mosaic_single.jpg");
+        sr->Display_CMD();
+        delete sr;
+    }
+
     // more ...
 
     delete img1;
@@ -90,5 +159,11 @@ int main(int argc, char *argv[]){
     delete img5;
     delete img6;
     delete img7;
+    delete img8;
+    delete img9;
+    delete img10;
+    delete img11;
+    delete img12;
+    delete img13;
     return 0;
 }

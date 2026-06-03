@@ -78,6 +78,28 @@ void RGBImage::resize(int newW, int newH) {
     height = newH;
 }
 
+// Step 5: extract a rectangular sub-region as a fresh RGBImage. Allocates the same
+// int*** shape Load_RGB uses, deep-copies the region from THIS image's pixels, and
+// hands it to the take-ownership constructor (so ~RGBImage frees it correctly).
+// const: reads only this image; the new buffer is independent (no shared pointers).
+RGBImage *RGBImage::crop(int x0, int y0, int cw, int ch) const {
+    if (pixels == nullptr || cw <= 0 || ch <= 0)
+        return nullptr;
+    if (x0 < 0 || y0 < 0 || x0 + cw > width || y0 + ch > height)
+        return nullptr;   // region out of bounds
+
+    int ***out = new int**[ch];
+    for (int y = 0; y < ch; ++y) {
+        out[y] = new int*[cw];
+        for (int x = 0; x < cw; ++x) {
+            out[y][x] = new int[3];
+            for (int c = 0; c < 3; ++c)
+                out[y][x][c] = pixels[y0 + y][x0 + x][c];
+        }
+    }
+    return new RGBImage(cw, ch, out);   // take-ownership ctor; caller deletes
+}
+
 bool RGBImage::LoadImage(string filename) {
     release();   // drop any previously held buffer first (reload-safe, leak-free)
 

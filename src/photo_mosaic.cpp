@@ -46,8 +46,69 @@ RGBImage *PhotoMosaic::generate(const std::string &tileDir, const std::string &t
     if (tiles.empty())
         return nullptr;                       // target auto-destructs here
 
-    // 3. Partition the target into whole cells only (floor); a remainder strip on
-    //    the right/bottom smaller than one cell is dropped.
+    // 3. Hand the preloaded tiles to the shared back end (it owns/frees them now).
+    return assemble(target, tiles, avgR, avgG, avgB);
+}
+
+// Step 5 — single-image mosaic. The tile pool is the grid of cell_size x cell_size
+// blocks cropped from ONE source image (RGBImage::crop, take-ownership), instead of
+// many files. Reuses the same average + assemble back end as the multi-image mode.
+RGBImage *PhotoMosaic::generate_single(const std::string &sourcePath, const std::string &targetPath) {
+    if (cell_size <= 0) return nullptr;
+
+    // Load target and source (both stack objects: auto-free on every return path).
+    RGBImage target;
+    if (!target.LoadImage(targetPath))
+        return nullptr;
+    RGBImage source;
+    if (!source.LoadImage(sourcePath))
+        return nullptr;                       // target auto-destructs here
+
+    // Whole cell_size blocks of the source only (floor); a remainder strip on the
+    // right/bottom smaller than one cell is dropped.
+    int blocksX = source.get_w() / cell_size;
+    int blocksY = source.get_h() / cell_size;
+    if (blocksX == 0 || blocksY == 0)
+        return nullptr;                       // source smaller than one cell
+
+    std::vector<RGBImage*> tiles;             // owned here until handed to assemble
+    std::vector<int> avgR, avgG, avgB;
+
+    int n = cell_size * cell_size;
+    for (int by = 0; by < blocksY; ++by) {
+        for (int bx = 0; bx < blocksX; ++bx) {
+            // Each block is exactly cell_size^2, so no resize is needed.
+            RGBImage *tile = source.crop(bx * cell_size, by * cell_size, cell_size, cell_size);
+            if (tile == nullptr) continue;    // defensive (in-bounds blocks won't hit this)
+
+            long sr = 0, sg = 0, sb = 0;      // friend access to tile's private pixels
+            for (int y = 0; y < cell_size; ++y)
+                for (int x = 0; x < cell_size; ++x) {
+                    sr += tile->pixels[y][x][0];
+                    sg += tile->pixels[y][x][1];
+                    sb += tile->pixels[y][x][2];
+                }
+            tiles.push_back(tile);
+            avgR.push_back(static_cast<int>(sr / n));
+            avgG.push_back(static_cast<int>(sg / n));
+            avgB.push_back(static_cast<int>(sb / n));
+        }
+    }
+
+    if (tiles.empty())
+        return nullptr;                       // target & source auto-destruct here
+
+    return assemble(target, tiles, avgR, avgG, avgB);
+}
+
+// Shared back end. Owns `tiles`: frees every entry before returning on ALL paths.
+RGBImage *PhotoMosaic::assemble(RGBImage &target,
+                                std::vector<RGBImage*> &tiles,
+                                std::vector<int> &avgR,
+                                std::vector<int> &avgG,
+                                std::vector<int> &avgB) {
+    // Partition the target into whole cells only (floor); a remainder strip on the
+    // right/bottom smaller than one cell is dropped.
     int cellsX = target.get_w() / cell_size;
     int cellsY = target.get_h() / cell_size;
     if (cellsX == 0 || cellsY == 0) {         // target smaller than one cell
@@ -57,8 +118,8 @@ RGBImage *PhotoMosaic::generate(const std::string &tileDir, const std::string &t
     int outW = cellsX * cell_size;
     int outH = cellsY * cell_size;
 
-    // 4. Allocate the output buffer in full BEFORE filling it (same int*** shape
-    //    Load_RGB uses, so ~RGBImage frees it correctly once we hand it over).
+    // Allocate the output buffer in full BEFORE filling it (same int*** shape
+    // Load_RGB uses, so ~RGBImage frees it correctly once we hand it over).
     int ***out = new int**[outH];
     for (int y = 0; y < outH; ++y) {
         out[y] = new int*[outW];
@@ -66,9 +127,9 @@ RGBImage *PhotoMosaic::generate(const std::string &tileDir, const std::string &t
             out[y][x] = new int[3];
     }
 
-    // 5. For each grid cell: average the target region, pick the closest tile by
-    //    squared RGB-average distance (argmin equals minimising the README sqrt),
-    //    and copy that tile's pixels into the cell's output block.
+    // For each grid cell: average the target region, pick the closest tile by
+    // squared RGB-average distance (argmin equals minimising the README sqrt), and
+    // copy that tile's pixels into the cell's output block.
     int n = cell_size * cell_size;
     for (int gy = 0; gy < cellsY; ++gy) {
         for (int gx = 0; gx < cellsX; ++gx) {
@@ -107,10 +168,11 @@ RGBImage *PhotoMosaic::generate(const std::string &tileDir, const std::string &t
         }
     }
 
-    // 6. Output fully filled -> hand it to an RGBImage (take-ownership), free the
-    //    tiles, return the result (caller owns it). target auto-destructs on return.
-    RGBImage *result = new RGBImage(outW, outH, out);
+    // Output fully filled. Free the tiles FIRST (we're done reading them), then
+    // hand `out` to an RGBImage (take-ownership) and return it (caller owns it).
+    // Freeing before the allocation keeps the tiles from leaking even if `new`
+    // were to throw.
     for (size_t i = 0; i < tiles.size(); ++i)
         delete tiles[i];
-    return result;
+    return new RGBImage(outW, outH, out);
 }
