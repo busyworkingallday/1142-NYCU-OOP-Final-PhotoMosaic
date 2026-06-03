@@ -1,7 +1,7 @@
 # OOP Final Project: Photo Mosaic
 Last Updated: 2026.06.04
 
-![image](https://hackmd.io/_uploads/By0sjAYbR.png)  
+![image](./README_images/miao.png)  
 如你所見，給定一張目標圖片，我們希望可以用很多張小圖拼湊出大圖的原貌。
 
 ## 歷屆解說影片
@@ -29,13 +29,13 @@ Ex：8 位元灰階影像
         
 *    灰階(有多黑/有多白)：
 不同於彩色影像，灰階影像包含各種灰色調。在 8 位元灰階影像中，每個像素代表不同的強度水平，其中 0 為黑色，255 為白色，中間有各種灰色調。[ref link](https://processing.org/tutorials/color)
-![image](https://hackmd.io/_uploads/ry0phvoW0.png)
-![image](https://hackmd.io/_uploads/SkegTwj-0.png)
+![image](./README_images/grayscale.png)
+![image](./README_images/minst.png)
 
 >[!Tip]
 >因此，在電腦圖形中表示灰階影像是非常簡單的:使用一個二維陣列，裡面每個數值皆落在 0 到 255 的範圍。若是彩色圖片，則將其二維陣列擴展為有RGB三個channel的三維陣列即可。
 >
->![image](https://hackmd.io/_uploads/B1IwawiW0.png)
+>![image](./README_images/rgb.png)
 
 ## Step 1: Play around data loader class(15%)
 圖片在存成jpg/png是有經過壓縮加密過的，若是學員要直接讀取圖片檔，會有不少問題。因此提供data_loader使學員可以直接得到圖片的像素矩陣及長寬，來進行後續的運算及操作。
@@ -89,7 +89,7 @@ data_loader提供了兩種介面來展示圖片:
         void Display_Gray_ASCII(int w, int h, int **pixels);
         void Display_RGB_ASCII(int w, int h, int ***pixels);
         ```
-        ![image](https://hackmd.io/_uploads/HJvPGdiWC.png)
+        ![image](./README_images/ascii_art.png)
 
 *    2. catimg 
         將圖片本身直接印在terminal，支援灰階及彩色圖片。
@@ -99,7 +99,7 @@ data_loader提供了兩種介面來展示圖片:
         void Display_RGB_CMD(string filename);
         ```
 
-        ![image](https://hackmd.io/_uploads/r1FFM_s-R.png)
+        ![image](./README_images/display_cmd.png)
 
         >[!TIP]
         >該function僅吃已存在的圖片檔的檔名，並把圖片印在terminal，請搭配前面所提到的dump使用。
@@ -299,16 +299,16 @@ int main(){
 以下列出幾個常見的影像處理演算法或是簡易的算式:
 
 *    Box filter(用於模糊)  
-![image](https://hackmd.io/_uploads/SkslPYj-R.png)
+![image](./README_images/blur.png)
 
 *    Sobel Gradient(萃取出垂直與水平的線條)  
-![image](https://hackmd.io/_uploads/SyUfwFs-0.png)
+![image](./README_images/vh_line.png)
 
 *    Contrast Stretching(影像銳化)  
-![image](https://hackmd.io/_uploads/B14EwFj-R.png)
+![image](./README_images/sharp.png)
 
 *    Mosaic filter(對照片打碼)  
-![image](https://hackmd.io/_uploads/BkvBvFibC.png)
+![image](./README_images/mosaic.png)
 
 
 學員可以參考 [大一上計算機程式設計期末專題成果展](https://hackmd.io/@coherent17/ICP_Final_Image_Filter)
@@ -343,10 +343,10 @@ int main(){
 
 
 感謝作者TA林煜睿提供照片測試:
-![image](https://hackmd.io/_uploads/r13qhFi-R.png)
+![image](./README_images/photo_mosaic.png)
 
 Zoom in:
-![Zoom in girl](https://hackmd.io/_uploads/B1PvTKoWC.jpg)
+![Zoom in girl](./README_images/photo_mosaic_zoomin.jpg)
 
 ## Step5: Optional features (25%)
 這個部分可做可不做，功能根據自己的興趣自由發揮。以下舉一些額外功能的例子:
@@ -359,7 +359,7 @@ Zoom in:
         
 *    Image Segamentation(影像分割)
 *    Photo Mosaic with only 1 picture [IEEE paper link](https://ieeexplore.ieee.org/document/7965140)  
-![image](https://hackmd.io/_uploads/r171Wpq-C.png)
+![image](./README_images/photo_mosaic_single_img.png)
 *    Parallel Algorithm Implementation(MPI/pthread/cuda): NTHU PP周志遠教授
 [![10710周志遠教授平行程式_第1A講 平行程式](https://img.youtube.com/vi/t_q0Tajpyso/0.jpg)](https://youtu.be/t_q0Tajpyso)
 
@@ -414,6 +414,23 @@ $ tree -L 2
 ├── LICENSE
 ├── Makefile
 ├── README.md
+├── README_images
+│   ├── ascii_art.png
+│   ├── blur.png
+│   ├── cppcheck_error.png
+│   ├── display_cmd.png
+│   ├── grayscale.png
+│   ├── jpeg_make_error.png
+│   ├── miao.png
+│   ├── minst.png
+│   ├── mosaic.png
+│   ├── photo_mosaic.png
+│   ├── photo_mosaic_single_img.png
+│   ├── photo_mosaic_zoomin.jpg
+│   ├── rgb.png
+│   ├── sharp.png
+│   ├── vh_line.png
+│   └── without_static_error.png
 ├── data_loader_demo.cpp (示範如何使用data_loader Step1)
 ├── inc (put your header here)
 │   ├── bit_field_filter.h (Step3)
@@ -537,7 +554,7 @@ $ tree -L 2
 *    Q5:  
         助教您好，關於make後執行編譯檔時顯示 Failed to recognize format of file 'Image-Folder/1.jpeg’.，也試過jpg檔和png檔，都出現同樣的問題，有用過file Image-Folder/1.jpeg測試檢查文件格式，出現JPEG image data ，所以應該是沒問題的。因此想詢問為何出現此錯誤呢？
 *    A5:  
-        ![image](https://hackmd.io/_uploads/HkZqatYHA.png)  
+        ![image](./README_images/jpeg_make_error.png)  
         這邊確實蠻複雜的，當初我在串Cimg library 的時候也卡了很久，跌了很多的坑，因此我提供了data_loader的class 讓你們免於這些困擾，你可以很簡易的使用data_loader 所提供的介面來把圖片讀成陣列！不需要自己去撰寫讀檔的部分！
         
 *    Q6:  
@@ -574,7 +591,7 @@ $ tree -L 2
         }
         ```
         執行結果:  
-        ![image](https://hackmd.io/_uploads/rJB9Wg9HC.png)
+        ![image](./README_images/without_static_error.png)
         可以看到這支程式中很明顯犯的錯誤，此為靜態分析。在沒有執行你的code的情況下，將我們的code當成cppcheck這支程式的input，來做code的錯誤偵測。
         
 *    Q7:  
@@ -586,7 +603,7 @@ $ tree -L 2
 
 *    Q8:  
         在檢查main.cpp時，他會報說:
-        ![image](https://hackmd.io/_uploads/BkACNa9rC.png)  
+        ![image](./README_images/cppcheck_error.png)  
         請問要這樣直接放進報告中嗎?還是要將其他所有的cpp檔都用cppcheck跑過一次?
 *    A8:  
         不過cppcheck 是可以recursive check 某個目錄底下的所有code 檔案，請將路徑改為我們專題的根目錄，並且將third-party 中的code exclude 掉，便可以偵測該project 中所有的code!
