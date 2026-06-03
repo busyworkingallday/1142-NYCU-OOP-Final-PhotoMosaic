@@ -1,4 +1,5 @@
 #include "gray_image.h"
+#include "bit_field_filter.h"  // RunOn (Step 3 double dispatch)
 #include "temp_file_guard.h"   // TempFileGuard (RAII temp-file cleanup)
 #include <cstdint>             // uintptr_t
 
@@ -31,6 +32,17 @@ void GrayImage::release() {
     }
     width = 0;
     height = 0;
+}
+
+// Step 3: free the current buffer (dims unchanged) and adopt a new same-size one.
+// Used by BitFieldFilter (friend) when a neighbourhood filter builds a fresh buffer.
+void GrayImage::replace_buffer(int **new_pixels) {
+    if (pixels != nullptr) {
+        for (int y = 0; y < height; ++y)
+            delete [] pixels[y];
+        delete [] pixels;
+    }
+    pixels = new_pixels;
 }
 
 bool GrayImage::LoadImage(string filename) {
@@ -85,4 +97,9 @@ void GrayImage::Display_CMD() {
     TempFileGuard guard(tmp);   // removes tmp on scope exit, even if the below throws
     data_loader.Dump_Gray(width, height, pixels, tmp);
     data_loader.Display_Gray_CMD(tmp);
+}
+
+// Step 3: double dispatch — resolves to BitFieldFilter::RunOn(GrayImage&).
+void GrayImage::ApplyFilters(const BitFieldFilter &filter) {
+    filter.RunOn(*this);
 }

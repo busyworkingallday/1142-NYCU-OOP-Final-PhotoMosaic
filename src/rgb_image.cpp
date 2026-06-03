@@ -1,4 +1,5 @@
 #include "rgb_image.h"
+#include "bit_field_filter.h"  // RunOn (Step 3 double dispatch)
 #include "temp_file_guard.h"   // TempFileGuard (RAII temp-file cleanup)
 #include <cstdint>             // uintptr_t
 
@@ -37,6 +38,22 @@ void RGBImage::release() {
     }
     width = 0;
     height = 0;
+}
+
+// Step 3: free the current buffer (dims unchanged) and adopt a new same-size one.
+// Used by BitFieldFilter (friend) when a neighbourhood filter builds a fresh buffer.
+void RGBImage::replace_buffer(int ***new_pixels) {
+    if (pixels != nullptr) {
+        for (int y = 0; y < height; ++y) {
+            if (pixels[y] != nullptr) {
+                for (int x = 0; x < width; ++x)
+                    delete [] pixels[y][x];
+                delete [] pixels[y];
+            }
+        }
+        delete [] pixels;
+    }
+    pixels = new_pixels;
 }
 
 bool RGBImage::LoadImage(string filename) {
@@ -88,4 +105,9 @@ void RGBImage::Display_CMD() {
     TempFileGuard guard(tmp);   // removes tmp on scope exit, even if the below throws
     data_loader.Dump_RGB(width, height, pixels, tmp);
     data_loader.Display_RGB_CMD(tmp);
+}
+
+// Step 3: double dispatch — resolves to BitFieldFilter::RunOn(RGBImage&).
+void RGBImage::ApplyFilters(const BitFieldFilter &filter) {
+    filter.RunOn(*this);
 }

@@ -4,6 +4,8 @@
 #include <string>
 #include "data_loader.h"   // provides Data_Loader and `using namespace std;`
 
+class BitFieldFilter;   // 前向宣告
+
 class Image{
 protected:
     int width;
@@ -22,6 +24,10 @@ public:
     virtual void DumpImage(string filename) = 0;
     virtual void Display_ASCII() = 0;
     virtual void Display_CMD() = 0;
+
+    // Step 3: apply a bit-field filter set to this image (double dispatch —
+    // each derived class calls filter.RunOn(*this) with its concrete type).
+    virtual void ApplyFilters(const BitFieldFilter &filter) = 0;
 };
 
 #endif
