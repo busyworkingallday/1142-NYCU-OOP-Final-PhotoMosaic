@@ -1,9 +1,9 @@
-# ompiler & Linker settings
+# compiler & Linker settings
 CXX = g++
 CXXFLAGS = -I ./inc -I ./third-party/CImg -I ./third-party/libjpeg -I ./Data-Loader -std=c++11
 OPTFLAGS = -march=native -flto -funroll-loops -finline-functions -ffast-math -O3
 WARNINGS = -g -Wall
-LINKER = -L/usr/X11R6/lib -lm -lpthread -lX11 -L./third-party/libjpeg -ljpeg -lpng
+LINKER = -L/usr/X11R6/lib -lm -lpthread -L./third-party/libjpeg -ljpeg -lpng
 
 # Valgrind for memory issue
 CHECKCC = valgrind

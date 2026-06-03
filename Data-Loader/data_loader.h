@@ -3,6 +3,7 @@
 
 #define cimg_use_jpeg
 #define cimg_use_png
+#define cimg_display 0
 #include "CImg.h"
 #include <iostream>
 #include <string>
@@ -10,6 +11,8 @@
 #include <vector>
 #include <cstdlib>
 #include <fstream>
+#include <dirent.h>  
+#include <cstring>  
 
 // for luminance formula: Y = 0.2126R + 0.7152G + 0.0722B
 #define R_FACTOR 0.2126

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "Installing dependencies (libpng-dev, libjpeg-dev, cmake)..."
+sudo apt-get update
+sudo apt-get install -y libpng-dev libjpeg-dev cmake
+
 # Create the directory 'third-party' if it doesn't exist
 mkdir -p third-party
 
@@ -27,6 +31,5 @@ git clone https://github.com/posva/catimg third-party/catimg
 cd third-party/catimg
 cmake .
 make -j
-
 
 echo "Cloning and configuration completed."
