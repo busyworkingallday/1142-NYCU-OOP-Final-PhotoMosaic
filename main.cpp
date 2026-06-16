@@ -130,7 +130,14 @@ int main(int argc, char *argv[]){
     // ---- Step 4: PhotoMosaic demo ----
     // Build a mosaic of lena out of the cifar10 tiles; the returned RGBImage* is
     // owned by us, so dump/display then delete it.
-    PhotoMosaic m(16);
+    //
+    // mosaic_alpha re-blends the original target over the finished mosaic so its
+    // outline/contrast re-emerge (the cifar10 tiles skew red, which otherwise
+    // washes out the picture). Tweak it here to compare: 0.0 = pure mosaic,
+    // ~0.35 = good balance, higher leans toward the original photo.
+    const double mosaic_alpha = 0.5;
+    const int    mosaic_cell  = 8;
+    PhotoMosaic m(mosaic_cell, mosaic_alpha);
     RGBImage *r = m.generate("Image-Folder/cifar10", "Image-Folder/lena.jpg");
     if (r) {
         r->DumpImage("mosaic.jpg");
@@ -142,7 +149,7 @@ int main(int argc, char *argv[]){
     // Tile source is the set of distinct blocks of ONE image (lena); they rebuild
     // the target (lena) — the IEEE single-image mosaic idea. Returned RGBImage* is
     // owned by us: dump/display then delete.
-    PhotoMosaic single_mosaic(16);
+    PhotoMosaic single_mosaic(8);
     RGBImage *sr = single_mosaic.generate_single("Image-Folder/lena.jpg", "Image-Folder/lena.jpg");
     if (sr) {
         sr->DumpImage("mosaic_single.jpg");

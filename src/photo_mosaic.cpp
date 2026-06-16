@@ -3,7 +3,16 @@
 #include "rgb_image.h"
 #include <vector>
 
-PhotoMosaic::PhotoMosaic(int cell_size) : cell_size(cell_size) {}
+PhotoMosaic::PhotoMosaic(int cell_size, double alpha)
+    : cell_size(cell_size), alpha(alpha) {
+    set_alpha(alpha);   // clamp the initial value into [0, 1]
+}
+
+void PhotoMosaic::set_alpha(double a) {
+    if (a < 0.0) a = 0.0;
+    if (a > 1.0) a = 1.0;
+    alpha = a;
+}
 
 RGBImage *PhotoMosaic::generate(const std::string &tileDir, const std::string &targetPath) {
     if (cell_size <= 0) return nullptr;
@@ -166,6 +175,26 @@ RGBImage *PhotoMosaic::assemble(RGBImage &target,
                     for (int c = 0; c < 3; ++c)
                         out[oy + y][ox + x][c] = src[y][x][c];
         }
+    }
+
+    // Alpha-blend the original target back over the finished mosaic so its outline
+    // and light/dark contrast re-emerge while the tile texture is kept. Skip the
+    // whole pass when alpha == 0 (pure mosaic). We resize `target` to the exact
+    // output size so the two images line up pixel-for-pixel; the remainder strip
+    // dropped above means outW/outH <= target's original dims, so this only ever
+    // shrinks. resize() manages target's own buffer (replace_buffer), no leak here.
+    if (alpha > 0.0) {
+        target.resize(outW, outH);
+        for (int y = 0; y < outH; ++y)
+            for (int x = 0; x < outW; ++x)
+                for (int c = 0; c < 3; ++c) {
+                    double v = (1.0 - alpha) * out[y][x][c]
+                             + alpha * target.pixels[y][x][c];
+                    int iv = static_cast<int>(v + 0.5);   // round, then clamp 0..255
+                    if (iv < 0) iv = 0;
+                    if (iv > 255) iv = 255;
+                    out[y][x][c] = iv;
+                }
     }
 
     // Output fully filled. Free the tiles FIRST (we're done reading them), then

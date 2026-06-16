@@ -12,7 +12,14 @@ class RGBImage;   // 前向宣告:generate 回傳 RGBImage*
 class PhotoMosaic{
 public:
     // cell_size: side length (px) of each grid cell; tiles are rescaled to this.
-    explicit PhotoMosaic(int cell_size = 16);
+    // alpha: opacity of the original target re-blended over the finished mosaic
+    //   (classic photomosaic trick to bring the target's outline/contrast back).
+    //   0.0 = pure mosaic, 1.0 = pure original; default 0.35 (~35% original).
+    explicit PhotoMosaic(int cell_size = 8, double alpha = 0.35);
+
+    // Tune the alpha-blend strength after construction (clamped to [0, 1]).
+    // Lets main.cpp compare effects without touching the constructor call.
+    void set_alpha(double a);
 
     // Tile the target into cell_size x cell_size grids; for each grid pick the
     // tile whose per-channel RGB average minimises sqrt(rd^2 + gd^2 + bd^2), and
@@ -30,6 +37,7 @@ public:
 
 private:
     int cell_size;
+    double alpha;     // original-target re-blend opacity; see set_alpha / blend step
 
     // Shared back end for both modes. Given a target and a pool of preloaded tiles
     // (each already cell_size x cell_size) with their per-channel average colours,

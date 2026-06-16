@@ -1,0 +1,104 @@
+Checking Data-Loader/data_loader.cpp ...
+Data-Loader/data_loader.cpp:13:12: warning: Assert statement calls a function which may have desired side effects: 'File_Exists'. [assertWithSideEffect]
+    assert(File_Exists(filename));
+           ^
+Data-Loader/data_loader.cpp:88:12: warning: Assert statement calls a function which may have desired side effects: 'File_Exists'. [assertWithSideEffect]
+    assert(File_Exists(filename));
+           ^
+Data-Loader/data_loader.cpp:189:12: warning: Assert statement calls a function which may have desired side effects: 'File_Exists'. [assertWithSideEffect]
+    assert(File_Exists(filename));
+           ^
+Data-Loader/data_loader.cpp:195:12: warning: Assert statement calls a function which may have desired side effects: 'File_Exists'. [assertWithSideEffect]
+    assert(File_Exists(filename));
+           ^
+Data-Loader/data_loader.cpp:207:9: style: Non-boolean value returned from function returning bool [returnNonBoolInBooleanFunction]
+        return -1;
+        ^
+Data-Loader/data_loader.h:32:10: performance: inconclusive: Technically the member function 'Data_Loader::Dump_Gray' can be static (but you may consider moving to unnamed namespace). [functionStatic]
+    void Dump_Gray(int w, int h, int **pixels, string filename);
+         ^
+Data-Loader/data_loader.cpp:118:19: note: Technically the member function 'Data_Loader::Dump_Gray' can be static (but you may consider moving to unnamed namespace).
+void Data_Loader::Dump_Gray(int w, int h, int **pixels, string filename){
+                  ^
+Data-Loader/data_loader.h:32:10: note: Technically the member function 'Data_Loader::Dump_Gray' can be static (but you may consider moving to unnamed namespace).
+    void Dump_Gray(int w, int h, int **pixels, string filename);
+         ^
+Data-Loader/data_loader.h:33:10: performance: inconclusive: Technically the member function 'Data_Loader::Dump_RGB' can be static (but you may consider moving to unnamed namespace). [functionStatic]
+    void Dump_RGB(int w, int h, int ***pixels, string filename);
+         ^
+Data-Loader/data_loader.cpp:134:19: note: Technically the member function 'Data_Loader::Dump_RGB' can be static (but you may consider moving to unnamed namespace).
+void Data_Loader::Dump_RGB(int w, int h, int ***pixels, string filename){
+                  ^
+Data-Loader/data_loader.h:33:10: note: Technically the member function 'Data_Loader::Dump_RGB' can be static (but you may consider moving to unnamed namespace).
+    void Dump_RGB(int w, int h, int ***pixels, string filename);
+         ^
+Data-Loader/data_loader.h:34:10: performance: inconclusive: Technically the member function 'Data_Loader::Display_Gray_ASCII' can be static (but you may consider moving to unnamed namespace). [functionStatic]
+    void Display_Gray_ASCII(int w, int h, int **pixels);
+         ^
+Data-Loader/data_loader.cpp:153:19: note: Technically the member function 'Data_Loader::Display_Gray_ASCII' can be static (but you may consider moving to unnamed namespace).
+void Data_Loader::Display_Gray_ASCII(int w, int h, int **pixels){
+                  ^
+Data-Loader/data_loader.h:34:10: note: Technically the member function 'Data_Loader::Display_Gray_ASCII' can be static (but you may consider moving to unnamed namespace).
+    void Display_Gray_ASCII(int w, int h, int **pixels);
+         ^
+Data-Loader/data_loader.h:35:10: performance: inconclusive: Technically the member function 'Data_Loader::Display_RGB_ASCII' can be static (but you may consider moving to unnamed namespace). [functionStatic]
+    void Display_RGB_ASCII(int w, int h, int ***pixels);
+         ^
+Data-Loader/data_loader.cpp:170:19: note: Technically the member function 'Data_Loader::Display_RGB_ASCII' can be static (but you may consider moving to unnamed namespace).
+void Data_Loader::Display_RGB_ASCII(int w, int h, int ***pixels){
+                  ^
+Data-Loader/data_loader.h:35:10: note: Technically the member function 'Data_Loader::Display_RGB_ASCII' can be static (but you may consider moving to unnamed namespace).
+    void Display_RGB_ASCII(int w, int h, int ***pixels);
+         ^
+Data-Loader/data_loader.h:38:10: performance: inconclusive: Technically the member function 'Data_Loader::List_Directory' can be static (but you may consider moving to unnamed namespace). [functionStatic]
+    bool List_Directory(string directoryPath, vector<string> &filenames);
+         ^
+Data-Loader/data_loader.cpp:200:19: note: Technically the member function 'Data_Loader::List_Directory' can be static (but you may consider moving to unnamed namespace).
+bool Data_Loader::List_Directory(string directoryPath, vector<string> &filenames) {
+                  ^
+Data-Loader/data_loader.h:38:10: note: Technically the member function 'Data_Loader::List_Directory' can be static (but you may consider moving to unnamed namespace).
+    bool List_Directory(string directoryPath, vector<string> &filenames);
+         ^
+Data-Loader/data_loader.h:41:10: performance: inconclusive: Technically the member function 'Data_Loader::File_Exists' can be static (but you may consider moving to unnamed namespace). [functionStatic]
+    bool File_Exists(const string &filename);
+         ^
+Data-Loader/data_loader.cpp:220:19: note: Technically the member function 'Data_Loader::File_Exists' can be static (but you may consider moving to unnamed namespace).
+bool Data_Loader::File_Exists(const string &filename){
+                  ^
+Data-Loader/data_loader.h:41:10: note: Technically the member function 'Data_Loader::File_Exists' can be static (but you may consider moving to unnamed namespace).
+    bool File_Exists(const string &filename);
+         ^
+Data-Loader/data_loader.cpp:12:37: performance: Function parameter 'filename' should be passed by const reference. [passedByValue]
+int **Data_Loader::Load_Gray(string filename, int *w, int *h){
+                                    ^
+Data-Loader/data_loader.cpp:87:37: performance: Function parameter 'filename' should be passed by const reference. [passedByValue]
+int ***Data_Loader::Load_RGB(string filename, int *w, int *h){
+                                    ^
+Data-Loader/data_loader.cpp:118:64: performance: Function parameter 'filename' should be passed by const reference. [passedByValue]
+void Data_Loader::Dump_Gray(int w, int h, int **pixels, string filename){
+                                                               ^
+Data-Loader/data_loader.cpp:134:64: performance: Function parameter 'filename' should be passed by const reference. [passedByValue]
+void Data_Loader::Dump_RGB(int w, int h, int ***pixels, string filename){
+                                                               ^
+Data-Loader/data_loader.cpp:200:41: performance: Function parameter 'directoryPath' should be passed by const reference. [passedByValue]
+bool Data_Loader::List_Directory(string directoryPath, vector<string> &filenames) {
+                                        ^
+1/9 files checked 14% done
+Checking data_loader_demo.cpp ...
+2/9 files checked 16% done
+Checking main.cpp ...
+3/9 files checked 29% done
+Checking src/bit_field_filter.cpp ...
+4/9 files checked 61% done
+Checking src/gray_image.cpp ...
+5/9 files checked 68% done
+Checking src/image.cpp ...
+6/9 files checked 69% done
+Checking src/image_factory.cpp ...
+7/9 files checked 71% done
+Checking src/photo_mosaic.cpp ...
+8/9 files checked 88% done
+Checking src/rgb_image.cpp ...
+9/9 files checked 100% done
+nofile:0:0: information: Cppcheck cannot find all the include files (use --check-config for details) [missingInclude]
+
