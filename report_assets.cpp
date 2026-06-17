@@ -40,7 +40,7 @@ static void dump_filter(uint16_t opt, const std::string &outfile) {
 }
 
 int main() {
-    system("mkdir -p report_assets");
+    if (system("mkdir -p report_assets") != 0) return 1;   // 用回傳值避免 warn_unused_result
 
     // ---------- Step 1 / Step 2：data_loader + 繼承多型的 Load/Dump/ASCII ----------
     // 灰階：透過 Image* 指標載入 mnist，dump 回檔（證明 load→pixel matrix→dump round-trip）

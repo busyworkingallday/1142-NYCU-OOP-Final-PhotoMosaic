@@ -16,15 +16,17 @@ make -j
 # 2. 編譯報告用 driver
 echo "[*] 編譯 report_assets..."
 mkdir -p report_assets
+# 注意：執行檔名稱不可與輸出目錄 report_assets/ 同名，否則 -o 會撞到目錄。
 g++ -I ./inc -I ./third-party/CImg -I ./third-party/libjpeg -I ./Data-Loader \
     -std=c++11 -O3 report_assets.cpp \
     obj/bit_field_filter.o obj/data_loader.o obj/gray_image.o obj/image.o \
     obj/image_factory.o obj/photo_mosaic.o obj/rgb_image.o \
-    -o report_assets -L./third-party/libjpeg -ljpeg -lpng -lm -lpthread
+    -o report_assets_gen \
+    -L/usr/X11R6/lib -lm -lpthread -L./third-party/libjpeg -ljpeg -lpng
 
 # 3. 執行，產生所有結果圖；ASCII art 導到文字檔
 echo "[*] 產生結果圖到 report_assets/ ..."
-./report_assets > report_assets/ascii_art.txt
+./report_assets_gen > report_assets/ascii_art.txt
 
 echo ""
 echo "[完成] 產出檔案："
